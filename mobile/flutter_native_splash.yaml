@@ -1,0 +1,14 @@
+flutter_native_splash:
+  android: true
+  ios: true
+  web: false
+
+  color: "#ffffff"
+  color_dark: "#2d2d2d"
+
+  image: "assets/toucant_splash.png"
+
+  android_12:
+    color: "#ffffff"
+    color_dark: "#2d2d2d"
+    image: "assets/toucant_splash_android12.png"
