@@ -1,5 +1,5 @@
 <div align="center">
-    <img src="./resources/icon.png" width="256" style="transform: scale(1.69)" alt="toucant icon" />
+    <img src="./resources/icon-large.png" width="256" alt="toucant icon" />
 </div>
 
 # toucant
