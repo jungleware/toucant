@@ -23,7 +23,7 @@ dev_dependencies:
   flutter_lints: ^4.0.0
   flutter_launcher_icons: ^0.13.1
   riverpod_generator: ^2.4.2
-  build_runner: ^2.4.12
+  build_runner:
   custom_lint: ^0.6.4
   riverpod_lint: ^2.3.12
 
