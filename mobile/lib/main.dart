@@ -1,108 +1,141 @@
-import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:toucant/providers/test.provider.dart';
+import 'dart:io';
 
-void main() {
-  runApp(ProviderScope(child: const TouCantApp()));
+import 'package:device_info_plus/device_info_plus.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_displaymode/flutter_displaymode.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:logging/logging.dart';
+import 'package:timezone/data/latest.dart';
+import 'package:toucant/constants/locales.dart';
+import 'package:toucant/extensions/build_context_extensions.dart';
+import 'package:toucant/providers/test.provider.dart';
+import 'package:toucant/routing/app_navigation_observer.dart';
+import 'package:toucant/routing/router.dart';
+import 'package:toucant/utils/toucant_app_theme.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await initApp();
+
+  runApp(
+    ProviderScope(child: const TouCantApp()),
+  );
 }
 
-class TouCantApp extends StatelessWidget {
-  const TouCantApp({super.key});
+Future<void> initApp() async {
+  await EasyLocalization.ensureInitialized();
+
+  if (kReleaseMode && Platform.isAndroid) {
+    try {
+      await FlutterDisplayMode.setHighRefreshRate();
+      debugPrint('High refresh rate set');
+    } catch (e) {
+      debugPrint('Error setting high refresh rate: $e');
+    }
+  }
+
+  var errorLogger = Logger("ToucantErrorLogger");
+
+  FlutterError.onError = (details) {
+    FlutterError.presentError(details);
+    errorLogger.severe(
+      'FlutterError - Catch all',
+      "${details.toString()}\nException: ${details.exception}\nLibrary: ${details.library}\nContext: ${details.context}",
+      details.stack,
+    );
+  };
+
+  PlatformDispatcher.instance.onError = (error, stackTrace) {
+    errorLogger.severe('PlatformDispatcher - Catch all', error, stackTrace);
+    return true;
+  };
+
+  initializeTimeZones();
+}
+
+class MainApp extends StatelessWidget {
+  const MainApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      themeMode: ThemeMode.system,
-      theme: ThemeData(
-        useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(seedColor: Color(0xFF2A453B), brightness: Brightness.light),
-        scaffoldBackgroundColor: Colors.white,
-        primaryColor: Color(0xFF2A453B),
-      ),
-      darkTheme: ThemeData(
-        useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(seedColor: Color(0xFF2A453B), brightness: Brightness.dark),
-        scaffoldBackgroundColor: Color(0xFF2D2D2D),
-        primaryColor: Color(0xFF2A453B),
-      ),
+    return EasyLocalization(
+      supportedLocales: toucantLocales.values.toList(),
+      path: translationsPath,
+      useFallbackTranslations: true,
+      fallbackLocale: toucantLocales.values.first,
+      child: const TouCantApp(),
     );
   }
 }
 
-class MyHomePage extends StatelessWidget {
-  const MyHomePage({super.key, required this.title});
+class TouCantApp extends ConsumerStatefulWidget {
+  const TouCantApp({super.key});
 
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
+  @override
+  ConsumerState<ConsumerStatefulWidget> createState() => _TouCantAppState();
+}
 
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
+class _TouCantAppState extends ConsumerState<TouCantApp> with WidgetsBindingObserver {
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      // do something
+    }
+  }
 
-  final String title;
+  Future<void> _initApp() async {
+    WidgetsBinding.instance.addObserver(this);
+
+    // Draw the app from edge to edge
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+
+    // Sets the navigation bar color
+    SystemUiOverlayStyle overlayStyle = const SystemUiOverlayStyle(
+      systemNavigationBarColor: Colors.transparent,
+    );
+
+    if (Platform.isAndroid) {
+      // Android 8 does not support transparent app bars
+      final info = await DeviceInfoPlugin().androidInfo;
+      if (info.version.sdkInt <= 26) {
+        overlayStyle = context.isDarkTheme ? SystemUiOverlayStyle.dark : SystemUiOverlayStyle.light;
+      }
+    }
+    SystemChrome.setSystemUIOverlayStyle(overlayStyle);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _initApp().then((_) => debugPrint('App initialized'));
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
-    return Scaffold(
-      appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(title),
+    var router = ref.watch(appRouterProvider);
+
+    return MaterialApp.router(
+      title: 'TouCant',
+      debugShowCheckedModeBanner: false,
+      themeMode: ThemeMode.system,
+      supportedLocales: context.supportedLocales,
+      localizationsDelegates: context.localizationDelegates,
+      theme: toucantLightTheme,
+      darkTheme: toucantDarkTheme,
+      routeInformationParser: router.defaultRouteParser(),
+      routerDelegate: router.delegate(
+        navigatorObservers: () => [AppNavigationObserver()],
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Consumer(
-              builder: (context, ref, child) {
-                final AsyncValue<int> count = ref.watch(testTestProvider);
-                return count.when<Widget>(
-                  data: (value) => Text('$value'),
-                  loading: () => const CircularProgressIndicator(),
-                  error: (error, stackTrace) => Text('Error: $error'),
-                );
-              },
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: Consumer(builder: (context, ref, child) {
-        return FloatingActionButton(
-          onPressed: () => ref.read(testTestProvider.notifier).increment(),
-          tooltip: 'Increment',
-          child: const Icon(Icons.add),
-        );
-      }), // This trailing comma makes auto-formatting nicer for build methods.
+      routeInformationProvider: router.routeInfoProvider(),
     );
   }
 }

@@ -1,8 +1,10 @@
 import 'dart:ui';
 
-const Map<String, Locale> locales = {
+const Map<String, Locale> toucantLocales = {
   // default
   'English (en_US)': Locale('en', 'US'),
   // supported
   'German (de_DE)': Locale('de', 'DE'),
 };
+
+const String translationsPath = 'assets/i18n';
