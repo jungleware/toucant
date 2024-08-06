@@ -11,7 +11,6 @@ import 'package:logging/logging.dart';
 import 'package:timezone/data/latest.dart';
 import 'package:toucant/constants/locales.dart';
 import 'package:toucant/extensions/build_context_extensions.dart';
-import 'package:toucant/providers/test.provider.dart';
 import 'package:toucant/routing/app_navigation_observer.dart';
 import 'package:toucant/routing/router.dart';
 import 'package:toucant/utils/toucant_app_theme.dart';
