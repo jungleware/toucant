@@ -1,1 +1,0 @@
-This folder contains all entities for local storage

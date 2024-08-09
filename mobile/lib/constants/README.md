@@ -1,1 +1,0 @@
-This folder contains all constants used throughout the app
