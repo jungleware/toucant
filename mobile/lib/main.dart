@@ -100,6 +100,7 @@ class _TouCantAppState extends ConsumerState<TouCantApp> with WidgetsBindingObse
       // Android 8 does not support transparent app bars
       final info = await DeviceInfoPlugin().androidInfo;
       if (info.version.sdkInt <= 26) {
+        if (!mounted) return;
         overlayStyle = context.isDarkTheme ? SystemUiOverlayStyle.dark : SystemUiOverlayStyle.light;
       }
     }
