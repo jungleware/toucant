@@ -7,4 +7,4 @@ const Map<String, Locale> toucantLocales = {
   'German (de_DE)': Locale('de', 'DE'),
 };
 
-const String translationsPath = 'assets/i18n';
+const String translationsPath = 'assets/translations';

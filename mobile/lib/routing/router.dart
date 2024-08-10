@@ -11,11 +11,13 @@ class AppRouter extends RootStackRouter {
   final _duplicateGuard = DuplicateGuard();
 
   @override
+  List<AutoRouteGuard> get guards => [_duplicateGuard];
+
+  @override
   List<AutoRoute> get routes {
     return [
       AutoRoute(
         page: SettingsRoute.page,
-        guards: [_duplicateGuard],
       ),
     ];
   }
