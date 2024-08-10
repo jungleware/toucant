@@ -20,7 +20,7 @@ void main() async {
   await initApp();
 
   runApp(
-    ProviderScope(child: const TouCantApp()),
+    const ProviderScope(child: TouCantApp()),
   );
 }
 

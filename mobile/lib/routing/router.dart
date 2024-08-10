@@ -6,7 +6,7 @@ import 'package:toucant/routing/router.gr.dart';
 @AutoRouterConfig(replaceInRouteName: 'Page,Route')
 class AppRouter extends RootStackRouter {
   @override
-  RouteType get defaultRouteType => RouteType.material();
+  RouteType get defaultRouteType => const RouteType.material();
 
   final _duplicateGuard = DuplicateGuard();
 

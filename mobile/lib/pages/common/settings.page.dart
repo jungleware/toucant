@@ -11,8 +11,8 @@ class SettingsPage extends HookConsumerWidget {
     var res = ref.watch(testTestProvider);
     return res.when(
       data: (data) => Text(data.toString()),
-      error: (msg, stk) => Text("Error"),
-      loading: () => Text("Ld"),
+      error: (msg, stk) => const Text("Error"),
+      loading: () => const Text("Ld"),
     );
   }
 }
