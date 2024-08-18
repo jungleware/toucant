@@ -5,6 +5,12 @@ plugins {
     id "dev.flutter.flutter-gradle-plugin"
 }
 
+def keystoreProperties = new Properties()
+def keystorePropertiesFile = rootProject.file('key.properties')
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+}
+
 android {
     namespace = "com.jungleware.toucant"
     compileSdk = flutter.compileSdkVersion
@@ -35,20 +41,20 @@ android {
             def keyPassword = System.getenv("ANDROID_KEY_PASSWORD")
             def storePassword = System.getenv("ANDROID_STORE_PASSWORD")
 
-            keyAlias keyAlias ? keyAlias : keystoresProperties['keyAlias']
-            keyPassword keyPassword ? keyPassword : keystoresProperties['keyPassword']
-            storeFile file("../key.jks") ? file("../key.jks") : file(keystoresProperties['storeFile'])
-            storePassword storePassword ? storePassword : keystoresProperties['storePassword']
+            keyAlias keyAlias ? keyAlias : keystoreProperties['keyAlias']
+            keyPassword keyPassword ? keyPassword : keystoreProperties['keyPassword']
+            storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile'])
+            storePassword storePassword ? storePassword : keystoreProperties['storePassword']
         }
     }
 
     buildTypes {
         debug {
-            applicationIdSuffix = ".debug"
-            versionNameSuffix = "-DEBUG"
+            applicationIdSuffix ".debug"
+            versionNameSuffix "-DEBUG"
         }
         release {
-            signingConfig = signingConfigs.release
+            signingConfig signingConfigs.release
         }
     }
 }

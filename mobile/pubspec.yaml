@@ -1,5 +1,5 @@
 name: toucant
-description: "A new Flutter project."
+description: "A demotivational app that helps you to stay focused on your goals (or not hehe)."
 
 publish_to: 'none'
 version: 0.0.1+1
@@ -13,15 +13,15 @@ dependencies:
 
   cupertino_icons: ^1.0.8
   flutter_native_splash: ^2.4.1
-  hooks_riverpod: ^2.5.1
+  hooks_riverpod: ^2.5.2
   flutter_hooks: ^0.20.5
   riverpod_annotation: ^2.3.5
   easy_localization: ^3.0.7
   flutter_displaymode: ^0.6.0
   timezone: ^0.9.4
   logging: ^1.2.0
-  device_info_plus: ^10.1.1
-  auto_route: ^9.1.0
+  device_info_plus: ^10.1.2
+  auto_route: ^9.2.1
   animations: ^2.0.11
 
 dev_dependencies:
@@ -29,10 +29,10 @@ dev_dependencies:
     sdk: flutter
   flutter_lints: ^4.0.0
   flutter_launcher_icons: ^0.13.1
-  riverpod_generator: ^2.4.2
+  riverpod_generator: ^2.4.3
   build_runner:
-  custom_lint: ^0.6.4
-  riverpod_lint: ^2.3.12
+  custom_lint: ^0.6.5
+  riverpod_lint: ^2.3.13
   auto_route_generator: ^9.0.0
 
 flutter:

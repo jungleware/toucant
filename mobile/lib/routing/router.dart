@@ -1,5 +1,5 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:toucant/routing/dupliacte_guard.dart';
 import 'package:toucant/routing/router.gr.dart';
 
@@ -16,9 +16,7 @@ class AppRouter extends RootStackRouter {
   @override
   List<AutoRoute> get routes {
     return [
-      AutoRoute(
-        page: SettingsRoute.page,
-      ),
+      AutoRoute(page: SettingsRoute.page),
     ];
   }
 }
