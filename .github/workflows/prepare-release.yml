@@ -1,0 +1,82 @@
+name: Prepare new release
+
+on:
+  workflow_dispatch:
+    inputs:
+      bump:
+        description: 'Bump version'
+        required: true
+        default: 'false'
+        type: choice
+        options:
+          - 'false'
+          - major
+          - minor
+          - patch
+
+jobs:
+  bump_version:
+    runs-on: ubuntu-latest
+
+    outputs:
+      TOUCANT_VERSION: ${{ steps.set_output.outputs.TOUCANT_VERSION }}
+
+    env:
+      TOUCANT_VERSION: "v0.0.0"
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Bump version
+        run: misc/bump_mobile.sh ${{ github.event.inputs.bump }}
+
+      - name: Commit new version
+        id: commit_new_version
+        uses: EndBug/add-and-commit@v9
+        with:
+          message: 'Version ${{ env.TOUCANT_VERSION }}'
+          author_name: 'toucant_version_bot'
+          author_email: 'lrsvombruch@gmail.com'
+          default_author: user_info
+          tag: ${{ env.TOUCANT_VERSION }}
+          push: true
+      
+      - name: Set output
+        id: set_output
+        run: echo "TOUCANT_VERSION=${{ env.TOUCANT_VERSION }}" >> $GITHUB_OUTPUT
+  
+  build_mobile:
+    uses: ./.github/workflows/build-mobile.yml
+    needs: [bump_version]
+    secrets: inherit
+
+  prepare_release:
+    runs-on: ubuntu-latest
+    needs: [bump_version, build_mobile]
+    env:
+      TOUCANT_VERSION: ${{ needs.bump_version.outputs.TOUCANT_VERSION }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download app files
+        uses: actions/download-artifact@v4
+        with:
+          name: release-signed
+          path: down
+
+      - name: Print toucant version
+        run: echo TOUCANT_VERSION=${{ env.TOUCANT_VERSION }}
+
+      - name: Create draft release
+        uses: softprops/action-gh-release@v2
+        with:
+          draft: true
+          tag_name: ${{ env.TOUCANT_VERSION }}
+          generate_release_notes: true
+          body_path: misc/draft_release.tmpl
+          files: |
+            down/bundle/release/*.aab
+            down/flutter-apk/*.apk

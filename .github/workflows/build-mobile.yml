@@ -1,2 +1,55 @@
 name: Build Mobile
 
+on:
+  workflow_dispatch:
+  workflow_call:
+
+jobs:
+  android:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup JAVA
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+          cache: 'gradle'
+
+      - name: Setup Flutter SDK
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version-file: ./mobile/pubspec.yaml
+          cache: true
+
+      - name: Create signing keystore
+        env:
+          KEY_JKS: ${{ secrets.KEY_JKS }}
+        working-directory: ./mobile
+        run: echo "$KEY_JKS" | base64 -d > android/key.jks
+
+      - name: Get Packages
+        working-directory: ./mobile
+        run: flutter pub get
+
+      - name: Build Android App
+        working-directory: ./mobile
+        env:
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+          ANDROID_STORE_PASSWORD: ${{ secrets.ANDROID_STORE_PASSWORD }}
+        run: |
+          flutter build appbundle --release
+          flutter build apk --release --split-per-abi
+
+      - name: Publish Android Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-signed
+          path: |
+            ./mobile/build/app/outputs/flutter-apk/*.apk
+            ./mobile/build/app/outputs/bundle/release/*.aab
