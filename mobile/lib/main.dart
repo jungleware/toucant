@@ -20,7 +20,7 @@ void main() async {
   await initApp();
 
   runApp(
-    const ProviderScope(child: TouCantApp()),
+    const ProviderScope(child: MainEntryPoint()),
   );
 }
 
@@ -55,15 +55,14 @@ Future<void> initApp() async {
   initializeTimeZones();
 }
 
-class MainApp extends StatelessWidget {
-  const MainApp({super.key});
+class MainEntryPoint extends StatelessWidget {
+  const MainEntryPoint({super.key});
 
   @override
   Widget build(BuildContext context) {
     return EasyLocalization(
       supportedLocales: toucantLocales.values.toList(),
       path: translationsPath,
-      useFallbackTranslations: true,
       fallbackLocale: toucantLocales.values.first,
       child: const TouCantApp(),
     );
@@ -77,17 +76,8 @@ class TouCantApp extends ConsumerStatefulWidget {
   ConsumerState<ConsumerStatefulWidget> createState() => _TouCantAppState();
 }
 
-class _TouCantAppState extends ConsumerState<TouCantApp> with WidgetsBindingObserver {
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) {
-      // do something
-    }
-  }
-
+class _TouCantAppState extends ConsumerState<TouCantApp> {
   Future<void> _initApp() async {
-    WidgetsBinding.instance.addObserver(this);
-
     // Draw the app from edge to edge
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
 
@@ -114,21 +104,16 @@ class _TouCantAppState extends ConsumerState<TouCantApp> with WidgetsBindingObse
   }
 
   @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     var router = ref.watch(appRouterProvider);
 
     return MaterialApp.router(
       title: 'TouCant',
       debugShowCheckedModeBanner: false,
-      themeMode: ThemeMode.system,
+      locale: context.locale,
       supportedLocales: context.supportedLocales,
       localizationsDelegates: context.localizationDelegates,
+      themeMode: ThemeMode.system,
       theme: toucantLightTheme,
       darkTheme: toucantDarkTheme,
       routeInformationParser: router.defaultRouteParser(),
