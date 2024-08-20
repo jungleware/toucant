@@ -76,8 +76,9 @@ class TouCantApp extends ConsumerStatefulWidget {
   ConsumerState<ConsumerStatefulWidget> createState() => _TouCantAppState();
 }
 
-class _TouCantAppState extends ConsumerState<TouCantApp> {
+class _TouCantAppState extends ConsumerState<TouCantApp> with WidgetsBindingObserver {
   Future<void> _initApp() async {
+    WidgetsBinding.instance.addObserver(this);
     // Draw the app from edge to edge
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
 
@@ -95,6 +96,12 @@ class _TouCantAppState extends ConsumerState<TouCantApp> {
       }
     }
     SystemChrome.setSystemUIOverlayStyle(overlayStyle);
+  }
+
+  @override
+  void didChangeLocales(List<Locale>? locales) {
+    super.didChangeLocales(locales);
+    context.setLocale(locales?.first ?? context.fallbackLocale!);
   }
 
   @override

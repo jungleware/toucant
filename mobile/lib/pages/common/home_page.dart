@@ -17,8 +17,8 @@ class HomePage extends ConsumerWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text("general_app_name").tr(),
-            Text("general_app_slogan").tr(),
+            Text(context.tr("general_app_name")),
+            Text(context.tr("general_app_slogan")),
           ],
         ),
       ),
