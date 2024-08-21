@@ -1,11 +1,11 @@
 import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:logging/logging.dart';
 import 'package:timezone/data/latest.dart';
@@ -14,19 +14,18 @@ import 'package:toucant/extensions/build_context_extensions.dart';
 import 'package:toucant/routing/app_navigation_observer.dart';
 import 'package:toucant/routing/router.dart';
 import 'package:toucant/utils/toucant_app_theme.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initApp();
 
   runApp(
-    const ProviderScope(child: MainEntryPoint()),
+    const ProviderScope(child: TouCantApp()),
   );
 }
 
 Future<void> initApp() async {
-  await EasyLocalization.ensureInitialized();
-
   if (kReleaseMode && Platform.isAndroid) {
     try {
       await FlutterDisplayMode.setHighRefreshRate();
@@ -53,20 +52,6 @@ Future<void> initApp() async {
   };
 
   initializeTimeZones();
-}
-
-class MainEntryPoint extends StatelessWidget {
-  const MainEntryPoint({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return EasyLocalization(
-      supportedLocales: toucantLocales.values.toList(),
-      path: translationsPath,
-      fallbackLocale: toucantLocales.values.first,
-      child: const TouCantApp(),
-    );
-  }
 }
 
 class TouCantApp extends ConsumerStatefulWidget {
@@ -99,12 +84,6 @@ class _TouCantAppState extends ConsumerState<TouCantApp> with WidgetsBindingObse
   }
 
   @override
-  void didChangeLocales(List<Locale>? locales) {
-    super.didChangeLocales(locales);
-    context.setLocale(locales?.first ?? context.fallbackLocale!);
-  }
-
-  @override
   void initState() {
     super.initState();
     _initApp().then((_) => debugPrint('App initialized'));
@@ -116,10 +95,14 @@ class _TouCantAppState extends ConsumerState<TouCantApp> with WidgetsBindingObse
 
     return MaterialApp.router(
       title: 'TouCant',
+      localizationsDelegates: [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: toucantLocales.values.toList(),
       debugShowCheckedModeBanner: false,
-      locale: context.locale,
-      supportedLocales: context.supportedLocales,
-      localizationsDelegates: context.localizationDelegates,
       themeMode: ThemeMode.system,
       theme: toucantLightTheme,
       darkTheme: toucantDarkTheme,

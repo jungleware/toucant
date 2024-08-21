@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations_en.dart';
+
 extension ContextHelper on BuildContext {
   // Returns the current padding from MediaQuery
   EdgeInsets get padding => MediaQuery.paddingOf(this);
@@ -33,4 +36,8 @@ extension ContextHelper on BuildContext {
 
   // Pop-out from the current context with optional result
   void pop<T>([T? result]) => Navigator.of(this).pop(result);
+
+  AppLocalizations get l10n {
+    return AppLocalizations.of(this) ?? AppLocalizationsEn();
+  }
 }

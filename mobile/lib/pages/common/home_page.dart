@@ -1,7 +1,7 @@
 import 'package:auto_route/annotations.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:toucant/extensions/build_context_extensions.dart';
 
 @RoutePage()
 class HomePage extends ConsumerWidget {
@@ -17,8 +17,8 @@ class HomePage extends ConsumerWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(context.tr("general_app_name")),
-            Text(context.tr("general_app_slogan")),
+            Text(context.l10n.general_app_name),
+            Text(context.l10n.general_app_slogan),
           ],
         ),
       ),
