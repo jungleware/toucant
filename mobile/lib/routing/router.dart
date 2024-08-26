@@ -1,24 +1,19 @@
-import 'package:auto_route/auto_route.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:toucant/routing/duplicate_guard.dart';
-import 'package:toucant/routing/router.gr.dart';
+import 'package:go_router/go_router.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:toucant/pages/home.page.dart';
+import 'package:toucant/pages/settings.page.dart';
 
-@AutoRouterConfig(replaceInRouteName: 'Page,Route')
-class AppRouter extends RootStackRouter {
-  @override
-  RouteType get defaultRouteType => const RouteType.material();
+final _appRouter = GoRouter(
+  routes: [
+    GoRoute(
+      path: '/',
+      builder: (context, state) => const HomePage(),
+    ),
+    GoRoute(
+      path: '/settings',
+      builder: (context, state) => const SettingsPage(),
+    ),
+  ],
+);
 
-  final _duplicateGuard = DuplicateGuard();
-
-  @override
-  List<AutoRouteGuard> get guards => [_duplicateGuard];
-
-  @override
-  List<AutoRoute> get routes {
-    return [
-      AutoRoute(page: HomeRoute.page, initial: true),
-    ];
-  }
-}
-
-final appRouterProvider = Provider((ref) => AppRouter());
+final appRouterProvider = Provider((ref) => _appRouter);

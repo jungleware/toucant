@@ -11,7 +11,6 @@ import 'package:logging/logging.dart';
 import 'package:timezone/data/latest.dart';
 import 'package:toucant/constants/locales.dart';
 import 'package:toucant/extensions/build_context_extensions.dart';
-import 'package:toucant/routing/app_navigation_observer.dart';
 import 'package:toucant/routing/router.dart';
 import 'package:toucant/utils/toucant_app_theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -91,7 +90,7 @@ class _TouCantAppState extends ConsumerState<TouCantApp> with WidgetsBindingObse
 
   @override
   Widget build(BuildContext context) {
-    var router = ref.watch(appRouterProvider);
+    final router = ref.watch(appRouterProvider);
 
     return MaterialApp.router(
       title: 'TouCant',
@@ -106,11 +105,7 @@ class _TouCantAppState extends ConsumerState<TouCantApp> with WidgetsBindingObse
       themeMode: ThemeMode.system,
       theme: toucantLightTheme,
       darkTheme: toucantDarkTheme,
-      routeInformationParser: router.defaultRouteParser(),
-      routerDelegate: router.delegate(
-        navigatorObservers: () => [AppNavigationObserver()],
-      ),
-      routeInformationProvider: router.routeInfoProvider(),
+      routerConfig: router,
     );
   }
 }
