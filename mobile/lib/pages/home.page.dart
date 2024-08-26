@@ -24,10 +24,17 @@ class HomePage extends ConsumerWidget {
           ),
         ],
       ),
-      body: daily.when(
-        data: (data) => _buildDaily(context, data),
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, stackTrace) => Center(child: Text('Error: $error')),
+      body: SafeArea(
+        child: daily.when(
+          data: (data) => _buildDaily(context, data),
+          loading: () => const Center(child: CircularProgressIndicator()),
+          error: (error, stackTrace) => Center(
+            child: Text(
+              context.l10n.error_no_daily_found,
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ),
       ),
     );
   }
