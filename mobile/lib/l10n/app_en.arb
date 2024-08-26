@@ -1,5 +1,7 @@
 {
     "@@locale": "en",
-    "general_app_name": "TouCant",
-    "general_app_slogan": "Demotivational Quotes"
+    "app_name": "TouCant",
+    "app_slogan": "Demotivational Quotes",
+    "common_settings": "Settings",
+    "error_no_daily_found": "No daily content for you, i guess..."
 }

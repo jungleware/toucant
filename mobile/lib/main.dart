@@ -108,11 +108,7 @@ class _TouCantAppState extends ConsumerState<TouCantApp> with WidgetsBindingObse
       themeMode: themeMode,
       theme: toucantLightTheme,
       darkTheme: toucantDarkTheme,
-      routeInformationParser: router.defaultRouteParser(),
-      routerDelegate: router.delegate(
-        navigatorObservers: () => [AppNavigationObserver()],
-      ),
-      routeInformationProvider: router.routeInfoProvider(),
+      routerConfig: router,
     );
   }
 }
