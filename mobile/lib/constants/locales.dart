@@ -6,5 +6,3 @@ const Map<String, Locale> toucantLocales = {
   // supported
   'German (de_DE)': Locale('de', 'DE'),
 };
-
-const String translationsPath = 'assets/translations';
