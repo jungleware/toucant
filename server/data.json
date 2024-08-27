@@ -1,0 +1,51 @@
+{
+    "offset": 739125,
+    "daily": [
+        {
+            "type": "quote",
+            "keywords": [
+                "salary",
+                "ceo"
+            ],
+            "content": [
+                {
+                    "lang": "de",
+                    "text": "Für das Jahr 2022 wurde das Verhältnis zwischen der Vergütung von Geschäftsführern und Arbeitnehmern in den Vereinigten Staaten auf einen Faktor von 344,3 geschätzt."
+                },
+                {
+                    "lang": "us",
+                    "text": "In 2022, it was estimated that the CEO-to-worker compensation ratio was 344.3 in the United States."
+                }
+            ],
+            "source": "https://www.statista.com/statistics/261463/ceo-to-worker-compensation-ratio-of-top-firms-in-the-us/"
+        },
+        {
+            "type": "quiz",
+            "keywords": [
+                "population",
+                "weight"
+            ],
+            "content": [
+                {
+                    "lang": "de",
+                    "text": "Wie hoch war der Anteil an Erwachsenen mit Übergewicht oder Fettleibigkeit in Deutschland im Jahr 2021?",
+                    "answer": "~50%",
+                    "wrong": [
+                        "~25%",
+                        "~75%"
+                    ]
+                },
+                {
+                    "lang": "us",
+                    "text": "What was the percentage of overweight or obese adults in most EU countries in 2021?",
+                    "answer": "~50%",
+                    "wrong": [
+                        "~25%",
+                        "~75%"
+                    ]
+                }
+            ],
+            "source": "https://de.statista.com/statistik/daten/studie/153908/umfrage/fettleibigkeit-unter-erwachsenen-in-oecd-laendern/"
+        }
+    ]
+}
