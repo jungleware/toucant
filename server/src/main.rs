@@ -1,6 +1,6 @@
 #![forbid(unsafe_code)]
 
-use axum::routing;
+use axum::{routing, Json};
 use chrono::Datelike;
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
@@ -9,7 +9,7 @@ use std::sync::Arc;
 ///
 /// `offset` is the offset of days since CE to start with.
 /// `daily` is the array of entries with form [Daily].
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 struct Data {
     offset: usize,
@@ -22,7 +22,7 @@ struct Data {
 /// `keywords` describe the daily entry category.
 /// `content` is the [Content] with type [Type].
 /// `source` is the source of the entry.
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 struct Daily {
     r#type: Type,
@@ -32,7 +32,7 @@ struct Daily {
 }
 
 /// Type of daily entry with `quote` or `quiz`
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields, rename_all = "lowercase")]
 enum Type {
     Quote,
@@ -40,7 +40,7 @@ enum Type {
 }
 
 /// Content enum with `quote` as [Quote] or `quiz` as [Quiz]
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields, untagged)]
 enum Content {
     Quote(Quote),
@@ -48,7 +48,7 @@ enum Content {
 }
 
 /// Quote that contains localized text `text` for lang `lang`
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 struct Quote {
     lang: String,
@@ -57,7 +57,7 @@ struct Quote {
 
 /// Quiz that contains localized text `text` for lang `lang`
 /// with answer `answer` and decoys `wrong`
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 struct Quiz {
     lang: String,
@@ -82,10 +82,7 @@ async fn main() {
         routing::get({
             let data = Arc::clone(&data);
 
-            move || async move {
-                serde_json::to_string(get_daily(&data))
-                    .expect("Parsing of current date entry failed")
-            }
+            move || async move { Json(get_daily(&data).to_owned()) }
         }),
     );
 
