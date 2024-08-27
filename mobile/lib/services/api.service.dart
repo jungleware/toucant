@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:intl/intl.dart';
+import 'package:toucant/constants/locales.dart';
 import 'package:toucant/models/daily.model.dart';
 
 class ApiService {
@@ -20,13 +21,20 @@ class ApiService {
     if (response.statusCode != 200) {
       throw Exception('Failed to load daily');
     }
-    final Map<String, dynamic> data = response.data;
 
-    // Get only the daily for the current locale
-    final String currentLocale = Intl.getCurrentLocale();
+    Map<String, dynamic> data = response.data;
 
-    data['content'].firstWhere((element) => element['lang'] == currentLocale);
+    // Get only the daily for the current locale (or fallback to first entry in )
+    String currentLocale = Intl.getCurrentLocale().split("_").first;
+    if (!toucantLocales.values.any((e) => e.languageCode == currentLocale)) {
+      currentLocale = toucantLocales.values.first.languageCode;
+    }
+    final Map<String, dynamic> content = data['content'].firstWhere((element) => element['lang'] == currentLocale);
 
-    return Daily.fromJson(response.data);
+    data.remove('content');
+    return Daily.fromJson({
+      ...data,
+      'content': content,
+    });
   }
 }
