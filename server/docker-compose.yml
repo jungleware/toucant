@@ -8,11 +8,11 @@ services:
         RUN apt update && \ 
             apt install cron -y
         RUN echo '0 0 * * * rm -rf /etc/nginx/cache/*' | crontab && \
-            echo '#!/bin/bash\n\ncron && /docker-entrypoint.sh "$@"' > entrypoint-wrapper.sh && \
+            echo '#!/bin/bash\n\ncron && rm -rf /etc/nginx/cache/* && /docker-entrypoint.sh "$@"' > entrypoint-wrapper.sh && \
             chmod +x /entrypoint-wrapper.sh
         ENTRYPOINT ["/entrypoint-wrapper.sh"]
         CMD ["nginx", "-g", "daemon off;"]
-    command: 
+    stop_signal: SIGKILL
     ports:
       - 80:80
       - 443:443
