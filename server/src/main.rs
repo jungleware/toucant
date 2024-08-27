@@ -79,11 +79,7 @@ async fn main() {
     // `/api/daily` returns current daily entry
     let app = axum::Router::new().route(
         "/api/daily",
-        routing::get({
-            let data = Arc::clone(&data);
-
-            move || async move { Json(get_daily(&data).to_owned()) }
-        }),
+        routing::get(move || async move { Json(get_daily(&data).to_owned()) }),
     );
 
     // Open PORT and start application
