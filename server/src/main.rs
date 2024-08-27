@@ -72,7 +72,7 @@ async fn main() {
     // Reading and parsing JSON
     let json = std::fs::File::open("data.json").expect("File `data.json` could not be opened");
     let data =
-        Arc::new(serde_json::from_reader(json).expect("File `data.json` could not be parsed"));
+        Box::new(serde_json::from_reader(json).expect("File `data.json` could not be parsed"));
     println!("Successfully loaded `data.json`...");
 
     // Initialize app with all routes
