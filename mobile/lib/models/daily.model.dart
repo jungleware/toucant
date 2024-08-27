@@ -30,6 +30,11 @@ class Daily {
       content: Content.fromJson(json['content']),
     );
   }
+
+  @override
+  String toString() {
+    return 'Daily(type: $type, keywords: $keywords, source: $source, content: $content)';
+  }
 }
 
 enum DailyType { QUOTE, QUIZ }

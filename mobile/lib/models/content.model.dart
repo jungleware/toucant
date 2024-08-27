@@ -28,4 +28,9 @@ class Content {
       wrongs: json['wrong'],
     );
   }
+
+  @override
+  String toString() {
+    return 'Content(locale: $locale, text: $text, answer: $answer, wrongs: $wrongs)';
+  }
 }
