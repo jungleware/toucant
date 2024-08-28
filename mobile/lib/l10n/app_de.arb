@@ -3,5 +3,7 @@
     "app_name": "TouCant",
     "app_slogan": "Demotivierende Zitate",
     "common_settings": "Einstellungen",
-    "error_no_daily_found": "Kein täglicher Inhalt für dich, vermute ich..."
+    "error_no_daily_found": "Kein täglicher Inhalt für dich, vermute ich...",
+    "common_no_responsibility": "Keine Verantwortung für Schäden (emotionaler Natur) durch den Inhalt dieser App.",
+    "common_open_source_website": "Mehr erfahren?"
 }

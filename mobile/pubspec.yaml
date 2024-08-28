@@ -2,7 +2,7 @@ name: toucant
 description: "A demotivational app that helps you to stay focused on your goals (or not hehe)."
 
 publish_to: "none"
-version: 0.0.1+1
+version: 0.1.0+1
 
 environment:
   sdk: ">=3.3.0 <4.0.0"
@@ -29,6 +29,8 @@ dependencies:
   dio_smart_retry: ^6.0.0
   go_router: ^14.2.7
   flutter_confetti: ^0.3.0
+  confetti: ^0.7.0
+  url_launcher: ^6.3.0
 
 dev_dependencies:
   flutter_test:

@@ -49,15 +49,21 @@ class ApiService {
     // Remove the content field from the data and add the content field with the current locale
     data.remove('content');
     return Daily.fromJson({
-      "type": "quiz",
-      "keywords": ["population", "weight"],
-      "content": {
-        "lang": "en",
-        "text": "What was the percentage of overweight or obese adults in most EU countries in 2021?",
-        "answer": "~50%",
-        "wrong": ["~25%", "~75%"]
-      },
-      "source": "https://de.statista.com/statistik/daten/studie/153908/umfrage/fettleibigkeit-unter-erwachsenen-in-oecd-laendern/"
+      // "type": "quiz",
+      // "keywords": ["population", "weight"],
+      // "content": {
+      //   "lang": "en",
+      //   "text": "What was the percentage of overweight or obese adults in most EU countries in 2021?",
+      //   "answer": "~50%",
+      //   "wrong": ["~25%", "~75%"]
+      // },
+      // "source": "https://de.statista.com/statistik/daten/studie/153908/umfrage/fettleibigkeit-unter-erwachsenen-in-oecd-laendern/"
+      ...data,
+      'content': content,
+      // "type": "quote",
+      // "keywords": ["salary", "ceo"],
+      // "content": {"lang": "en", "text": "In 2022, it was estimated that the CEO-to-worker compensation ratio was 344.3 in the United States."},
+      // "source": "https://www.statista.com/statistics/261463/ceo-to-worker-compensation-ratio-of-top-firms-in-the-us/"
     });
   }
 }

@@ -23,24 +23,18 @@ class Daily {
   });
 
   factory Daily.fromJson(Map<String, dynamic> json) {
+    DailyType type = json['type'] == 'quote' ? DailyType.QUOTE : DailyType.QUIZ;
     return Daily(
-      type: json['type'] == 'quote' ? DailyType.QUOTE : DailyType.QUIZ,
+      type: type,
       keywords: List<String>.from(json['keywords']),
       source: json['source'],
-      content: Content.fromJson(json['content']),
+      content: Content.fromJson(json['content'], type),
     );
   }
 
   @override
   String toString() {
     return 'Daily(type: $type, keywords: $keywords, source: $source, content: $content)';
-  }
-
-  List<String> get possibleAnswers {
-    if (type == DailyType.QUIZ) {
-      return [content.answer!, ...content.wrongs!];
-    }
-    return [];
   }
 }
 
