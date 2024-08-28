@@ -35,6 +35,13 @@ class Daily {
   String toString() {
     return 'Daily(type: $type, keywords: $keywords, source: $source, content: $content)';
   }
+
+  List<String> get possibleAnswers {
+    if (type == DailyType.QUIZ) {
+      return [content.answer!, ...content.wrongs!];
+    }
+    return [];
+  }
 }
 
 enum DailyType { QUOTE, QUIZ }

@@ -11,6 +11,7 @@ import 'package:logging/logging.dart';
 import 'package:timezone/data/latest.dart';
 import 'package:toucant/constants/locales.dart';
 import 'package:toucant/extensions/build_context_extensions.dart';
+import 'package:toucant/provider/daily.provider.dart';
 import 'package:toucant/provider/theme.provider.dart';
 import 'package:toucant/routing/router.dart';
 import 'package:toucant/utils/toucant_app_theme.dart';
@@ -81,6 +82,14 @@ class _TouCantAppState extends ConsumerState<TouCantApp> with WidgetsBindingObse
       }
     }
     SystemChrome.setSystemUIOverlayStyle(overlayStyle);
+  }
+
+  /// Invalidate the daily provider when the locale changes
+  /// to fetch the new daily content in the new locale
+  @override
+  void didChangeLocales(List<Locale>? locales) {
+    ref.invalidate(getDailyProvider);
+    super.didChangeLocales(locales);
   }
 
   @override
