@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:in_app_update/in_app_update.dart';
 import 'package:logging/logging.dart';
 import 'package:timezone/data/latest.dart';
 import 'package:toucant/constants/locales.dart';
@@ -63,6 +64,15 @@ class TouCantApp extends ConsumerStatefulWidget {
 }
 
 class _TouCantAppState extends ConsumerState<TouCantApp> with WidgetsBindingObserver {
+  // The update info
+  AppUpdateInfo? _updateInfo;
+
+  // The scaffold key to show snack bars
+  GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey();
+
+  // Whether a flexible update is available
+  bool _flexibleUpdateAvailable = false;
+
   Future<void> _initApp() async {
     WidgetsBinding.instance.addObserver(this);
     // Draw the app from edge to edge
@@ -82,6 +92,23 @@ class _TouCantAppState extends ConsumerState<TouCantApp> with WidgetsBindingObse
       }
     }
     SystemChrome.setSystemUIOverlayStyle(overlayStyle);
+
+    // Check for updates and perform them if necessary
+    await checkForUpdate();
+  }
+
+  Future<void> checkForUpdate() async {
+    await InAppUpdate.checkForUpdate().then(
+      (info) => setState(() => _updateInfo = info),
+      onError: (e) => debugPrint('Error checking for update: $e'),
+    );
+  }
+
+  /// Show a snack bar with the given text
+  void showSnack(String text) {
+    if (_scaffoldKey.currentContext != null) {
+      ScaffoldMessenger.of(_scaffoldKey.currentContext!).showSnackBar(SnackBar(content: Text(text)));
+    }
   }
 
   /// Invalidate the daily provider when the locale changes
@@ -102,6 +129,80 @@ class _TouCantAppState extends ConsumerState<TouCantApp> with WidgetsBindingObse
   Widget build(BuildContext context) {
     var router = ref.watch(appRouterProvider);
     var themeMode = ref.watch(themeProvider);
+
+    if (_updateInfo != null && _updateInfo!.updateAvailability == UpdateAvailability.updateAvailable) {
+      return MaterialApp(
+        title: 'TouCant',
+        localizationsDelegates: [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: toucantLocales.values.toList(),
+        debugShowCheckedModeBanner: false,
+        themeMode: ThemeMode.dark,
+        theme: toucantLightTheme,
+        darkTheme: toucantDarkTheme,
+        home: Builder(
+          builder: (context) {
+            return Scaffold(
+              key: _scaffoldKey,
+              body: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      context.l10n.common_update_available,
+                      style: context.textTheme.headlineSmall,
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      context.l10n.common_update_available_description,
+                      textAlign: TextAlign.center,
+                      style: context.textTheme.bodyMedium,
+                    ),
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: () {
+                        // Perform immediate update if allowed
+
+                        if (_updateInfo!.immediateUpdateAllowed) {
+                          InAppUpdate.performImmediateUpdate().catchError((e) {
+                            debugPrint('Error updating: $e');
+                            showSnack(e.toString());
+                            return AppUpdateResult.inAppUpdateFailed;
+                          });
+                        } else if (_updateInfo!.flexibleUpdateAllowed) {
+                          if (_flexibleUpdateAvailable) {
+                            // If update is already downloaded, complete the update
+                            InAppUpdate.completeFlexibleUpdate().catchError((e) {
+                              debugPrint('Error updating: $e');
+                              showSnack(e.toString());
+                            });
+                          } else {
+                            // Start the flexible update download
+                            InAppUpdate.startFlexibleUpdate().then((_) {
+                              setState(() => _flexibleUpdateAvailable = true);
+                            }).catchError((e) {
+                              debugPrint('Error updating: $e');
+                              showSnack(e.toString());
+                            });
+                          }
+                        }
+                      },
+                      child: Text(
+                        _flexibleUpdateAvailable ? context.l10n.common_update_install : context.l10n.common_update_now,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        ),
+      );
+    }
 
     return MaterialApp.router(
       title: 'TouCant',
