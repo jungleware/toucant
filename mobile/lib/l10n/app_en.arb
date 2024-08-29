@@ -5,11 +5,12 @@
     "error_no_daily_found": "No daily content for you, i guess...",
     "error_unknown_daily_type": "Unknown daily type",
     "error_no_internet": "No internet connection",
-    "common_settings": "Settings",
     "common_update_available": "Update available",
     "common_update_now": "Update now",
     "common_update_install": "Install",
     "common_update_available_description": "There is a new version of the app. Please update the app to continue.",
     "common_no_responsibility": "No responsibility taken for any (emotional) damage caused by the content of this app.",
-    "common_open_source_website": "Want to know more?"
+    "common_open_source_website": "Want to know more?",
+    "common_settings": "Settings",
+    "common_settings_version": "Version"
 }

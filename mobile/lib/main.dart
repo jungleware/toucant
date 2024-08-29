@@ -13,6 +13,7 @@ import 'package:timezone/data/latest.dart';
 import 'package:toucant/constants/locales.dart';
 import 'package:toucant/extensions/build_context_extensions.dart';
 import 'package:toucant/provider/daily.provider.dart';
+import 'package:toucant/provider/package_info.provider.dart';
 import 'package:toucant/provider/theme.provider.dart';
 import 'package:toucant/routing/router.dart';
 import 'package:toucant/utils/toucant_app_theme.dart';
@@ -95,6 +96,9 @@ class _TouCantAppState extends ConsumerState<TouCantApp> with WidgetsBindingObse
 
     // Check for updates and perform them if necessary
     await checkForUpdate();
+
+    // Init package info
+    ref.read(packageInfoProvider);
   }
 
   Future<void> checkForUpdate() async {
