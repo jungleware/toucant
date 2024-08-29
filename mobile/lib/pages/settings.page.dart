@@ -10,7 +10,7 @@ class SettingsPage extends HookConsumerWidget {
       appBar: AppBar(
         title: Text(context.l10n.common_settings),
       ),
-      body: Column(
+      body: const Column(
         children: [],
       ),
     );

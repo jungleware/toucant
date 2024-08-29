@@ -4,6 +4,8 @@
     "app_slogan": "Demotivational Quotes",
     "common_settings": "Settings",
     "error_no_daily_found": "No daily content for you, i guess...",
+    "error_unknown_daily_type": "Unknown daily type",
+    "error_no_internet": "No internet connection",
     "common_no_responsibility": "No responsibility taken for any (emotional) damage caused by the content of this app.",
     "common_open_source_website": "Want to know more?"
 }
