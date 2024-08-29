@@ -145,7 +145,7 @@ class _TouCantAppState extends ConsumerState<TouCantApp> with WidgetsBindingObse
         ],
         supportedLocales: toucantLocales.values.toList(),
         debugShowCheckedModeBanner: false,
-        themeMode: ThemeMode.dark,
+        themeMode: themeMode,
         theme: toucantLightTheme,
         darkTheme: toucantDarkTheme,
         home: Builder(

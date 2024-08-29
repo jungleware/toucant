@@ -8,6 +8,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:toucant/extensions/build_context_extensions.dart';
 import 'package:toucant/models/daily.model.dart';
 import 'package:toucant/provider/daily.provider.dart';
+import 'package:toucant/widgets/clickable_text.widget.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
@@ -38,6 +39,7 @@ class HomePage extends HookConsumerWidget {
           padding: const EdgeInsets.all(12.0),
           child: Image.asset('assets/toucant_splash.png'),
         ),
+        centerTitle: true,
         actions: [
           IconButton(
             icon: const Icon(Icons.settings),
@@ -110,9 +112,10 @@ class HomePage extends HookConsumerWidget {
                         alignment: Alignment.bottomCenter,
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            context.l10n.common_no_responsibility,
-                            textAlign: TextAlign.center,
+                          child: ElevatedButton.icon(
+                            onPressed: () {},
+                            label: Text(context.l10n.common_help_button_text),
+                            icon: const Icon(Icons.help_outline_outlined),
                           ),
                         ),
                       ),
@@ -138,12 +141,9 @@ class HomePage extends HookConsumerWidget {
             style: context.textTheme.headlineSmall,
           ),
           const SizedBox(height: 16),
-          SelectableText.rich(
-            TextSpan(
-              text: context.l10n.common_open_source_website,
-              style: context.textTheme.bodySmall?.copyWith(color: Colors.blue),
-              recognizer: TapGestureRecognizer()..onTap = () => _launchSource(context, daily.source),
-            ),
+          TextButton(
+            onPressed: () {},
+            child: Text(context.l10n.common_open_source_website),
           ),
         ],
       ),
@@ -166,12 +166,9 @@ class HomePage extends HookConsumerWidget {
             spacing: 16,
           ),
           const SizedBox(height: 16),
-          SelectableText.rich(
-            TextSpan(
-              text: context.l10n.common_open_source_website,
-              style: context.textTheme.bodySmall?.copyWith(color: Colors.blue),
-              recognizer: TapGestureRecognizer()..onTap = () => _launchSource(context, daily.source),
-            ),
+          ClickableText(
+            text: context.l10n.common_open_source_website,
+            onTap: () => _launchSource(context, daily.source),
           ),
         ],
       ),

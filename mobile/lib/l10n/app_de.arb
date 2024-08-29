@@ -12,5 +12,13 @@
     "common_no_responsibility": "Keine Verantwortung für Schäden (emotionaler Natur) durch den Inhalt dieser App.",
     "common_open_source_website": "Mehr erfahren?",
     "common_settings": "Einstellungen",
-    "common_settings_version": "Version"
+    "common_settings_version": "Version",
+    "common_privacy_policy": "Datenschutzrichtlinien",
+    "common_open_source_licenses": "Open Source Lizenzen",
+    "common_help_button_text": "Hilfe",
+    "settings_group_appearance": "Erscheinungsbild",
+    "settings_theme_title": "Erscheinungsbild",
+    "settings_theme_dark": "Dunkles Design",
+    "settings_theme_light": "Helles Design",
+    "settings_theme_system": "Systemdesign"
 }
