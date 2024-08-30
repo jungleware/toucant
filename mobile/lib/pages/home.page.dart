@@ -113,9 +113,10 @@ class HomePage extends HookConsumerWidget {
                         alignment: Alignment.bottomCenter,
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: ElevatedButton(
-                            onPressed: () {},
-                            child: Text(context.l10n.common_help_button_text),
+                          child: Text(
+                            context.l10n.common_no_responsibility,
+                            style: context.textTheme.bodySmall!.copyWith(color: context.textTheme.bodySmall!.color!.withOpacity(0.5)),
+                            textAlign: TextAlign.center,
                           ),
                         ),
                       ),
@@ -191,7 +192,7 @@ class HomePage extends HookConsumerWidget {
     if (userAnswer == answer) {
       // If the users answer is correct, return the primary color
       if (daily.content.answer == answer) return context.themeData.colorScheme.primaryContainer;
-      return context.themeData.colorScheme.onError;
+      return context.themeData.colorScheme.errorContainer;
     }
     return null;
   }

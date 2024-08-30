@@ -23,12 +23,19 @@ class SettingsService extends Notifier<AppSettings> {
     final prefs = ref.read(sharedPrefsProvider);
     Map<String, dynamic> appSettings = jsonDecode(prefs.getString('appSettings') ?? '{}');
     if (appSettings.isEmpty) {
-      // TODO: Add default settings here
-      state = AppSettings(
-        themeSetting: ThemeMode.system,
-      );
+      state = defaultSettings;
       return;
     }
-    state = AppSettings.fromJson(appSettings);
+    try {
+      state = AppSettings.fromJson(appSettings);
+    } on Exception catch (e) {
+      debugPrint('Error reading settings: $e');
+      prefs.remove('appSettings');
+      state = defaultSettings;
+    }
   }
 }
+
+final AppSettings defaultSettings = AppSettings(
+  themeSetting: ThemeMode.system,
+);

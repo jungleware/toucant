@@ -167,54 +167,56 @@ class _TouCantAppState extends ConsumerState<TouCantApp> with WidgetsBindingObse
           builder: (context) {
             return Scaffold(
               key: _scaffoldKey,
-              body: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      context.l10n.common_update_available,
-                      style: context.textTheme.headlineSmall,
-                    ),
-                    const SizedBox(height: 16),
-                    Text(
-                      context.l10n.common_update_available_description,
-                      textAlign: TextAlign.center,
-                      style: context.textTheme.bodyMedium,
-                    ),
-                    const SizedBox(height: 16),
-                    ElevatedButton(
-                      onPressed: () {
-                        // Perform immediate update if allowed
-
-                        if (_updateInfo!.immediateUpdateAllowed) {
-                          InAppUpdate.performImmediateUpdate().catchError((e) {
-                            debugPrint('Error updating: $e');
-                            showSnack(e.toString());
-                            return AppUpdateResult.inAppUpdateFailed;
-                          });
-                        } else if (_updateInfo!.flexibleUpdateAllowed) {
-                          if (_flexibleUpdateAvailable) {
-                            // If update is already downloaded, complete the update
-                            InAppUpdate.completeFlexibleUpdate().catchError((e) {
-                              debugPrint('Error updating: $e');
-                              showSnack(e.toString());
-                            });
-                          } else {
-                            // Start the flexible update download
-                            InAppUpdate.startFlexibleUpdate().then((_) {
-                              setState(() => _flexibleUpdateAvailable = true);
-                            }).catchError((e) {
-                              debugPrint('Error updating: $e');
-                              showSnack(e.toString());
-                            });
-                          }
-                        }
-                      },
-                      child: Text(
-                        _flexibleUpdateAvailable ? context.l10n.common_update_install : context.l10n.common_update_now,
+              body: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        context.l10n.common_update_available,
+                        style: context.textTheme.headlineSmall,
                       ),
-                    ),
-                  ],
+                      const SizedBox(height: 16),
+                      Text(
+                        context.l10n.common_update_available_description,
+                        textAlign: TextAlign.center,
+                        style: context.textTheme.bodyMedium,
+                      ),
+                      const SizedBox(height: 16),
+                      ElevatedButton(
+                        onPressed: () {
+                          // Perform immediate update if allowed
+                          if (_updateInfo!.immediateUpdateAllowed) {
+                            InAppUpdate.performImmediateUpdate().catchError((e) {
+                              debugPrint('Error updating: $e');
+                              showSnack(e.toString());
+                              return AppUpdateResult.inAppUpdateFailed;
+                            });
+                          } else if (_updateInfo!.flexibleUpdateAllowed) {
+                            if (_flexibleUpdateAvailable) {
+                              // If update is already downloaded, complete the update
+                              InAppUpdate.completeFlexibleUpdate().catchError((e) {
+                                debugPrint('Error updating: $e');
+                                showSnack(e.toString());
+                              });
+                            } else {
+                              // Start the flexible update download
+                              InAppUpdate.startFlexibleUpdate().then((_) {
+                                setState(() => _flexibleUpdateAvailable = true);
+                              }).catchError((e) {
+                                debugPrint('Error updating: $e');
+                                showSnack(e.toString());
+                              });
+                            }
+                          }
+                        },
+                        child: Text(
+                          _flexibleUpdateAvailable ? context.l10n.common_update_install : context.l10n.common_update_now,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             );
