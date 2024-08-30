@@ -20,5 +20,8 @@
     "settings_theme_title": "Erscheinungsbild",
     "settings_theme_dark": "Dunkles Design",
     "settings_theme_light": "Helles Design",
-    "settings_theme_system": "Systemdesign"
+    "settings_theme_system": "Systemdesign",
+    "semantics_app_icon": "Das App-Symbol, das einen Tukanvogel darstellt.",
+    "semantics_current_app_theme": "Die App verwendet derzeit das {theme}.",
+    "semantics_current_app_version": "Die App verwendet derzeit die Version {version}."
 }

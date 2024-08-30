@@ -32,18 +32,29 @@ class HomePage extends HookConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(context.l10n.app_name),
+        title: Text(
+          context.l10n.app_name,
+          semanticsLabel: context.l10n.app_name,
+        ),
         leading: Padding(
           padding: const EdgeInsets.all(12.0),
-          child: Image.asset('assets/toucant_splash.png'),
+          child: Image.asset(
+            'assets/toucant_splash.png',
+            semanticLabel: context.l10n.semantics_app_icon,
+          ),
         ),
         centerTitle: true,
         actions: [
-          IconButton(
-            icon: const Icon(Icons.settings),
-            onPressed: () {
-              context.push('/settings');
-            },
+          Semantics(
+            button: true,
+            label: context.l10n.common_settings,
+            child: IconButton(
+              icon: const Icon(Icons.settings),
+              tooltip: context.l10n.common_settings,
+              onPressed: () {
+                context.push('/settings');
+              },
+            ),
           ),
         ],
       ),
@@ -89,7 +100,12 @@ class HomePage extends HookConsumerWidget {
                               userAnswer: userAnswer.value,
                             );
                           }
-                          return Center(child: Text(context.l10n.error_unknown_daily_type));
+                          return Center(
+                            child: Text(
+                              context.l10n.error_unknown_daily_type,
+                              semanticsLabel: context.l10n.error_unknown_daily_type,
+                            ),
+                          );
                         },
                         loading: () => const Center(child: CircularProgressIndicator()),
                         error: (error, stackTrace) {
@@ -144,7 +160,10 @@ class HomePage extends HookConsumerWidget {
           const SizedBox(height: 16),
           TextButton(
             onPressed: () => _launchSource(context, daily.source),
-            child: Text(context.l10n.common_open_source_website),
+            child: Text(
+              context.l10n.common_open_source_website,
+              semanticsLabel: context.l10n.common_open_source_website,
+            ),
           ),
         ],
       ),
@@ -169,7 +188,10 @@ class HomePage extends HookConsumerWidget {
           const SizedBox(height: 16),
           TextButton(
             onPressed: () => _launchSource(context, daily.source),
-            child: Text(context.l10n.common_open_source_website),
+            child: Text(
+              context.l10n.common_open_source_website,
+              semanticsLabel: context.l10n.common_open_source_website,
+            ),
           ),
         ],
       ),

@@ -20,5 +20,8 @@
     "settings_theme_title": "Theme",
     "settings_theme_dark": "Dark",
     "settings_theme_light": "Light",
-    "settings_theme_system": "System"
+    "settings_theme_system": "System",
+    "semantics_app_icon": "The app icon, representing a toucan bird.",
+    "semantics_current_app_theme": "The app is currently using the {theme} theme.",
+    "semantics_current_app_version": "The app is currently running version {version}."
 }
