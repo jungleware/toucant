@@ -1,13 +1,9 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:grouped_list/grouped_list.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:toucant/constants/strings.dart';
 import 'package:toucant/extensions/build_context_extensions.dart';
-import 'package:toucant/models/setting.model.dart';
 import 'package:toucant/provider/package_info.provider.dart';
+import 'package:toucant/provider/settings.provider.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class SettingsPage extends HookConsumerWidget {
@@ -15,18 +11,7 @@ class SettingsPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final List<Setting> settings = useMemoized(() {
-      return [
-        Setting(
-          name: context.l10n.settings_theme_title,
-          group: context.l10n.settings_group_appearance,
-          icon: const Icon(Icons.color_lens),
-          value: context.l10n.settings_theme_system,
-          onTap: () {},
-        ),
-      ];
-    });
-
+    final appSettings = ref.watch(appSettingsProvider);
     return Scaffold(
       appBar: AppBar(
         title: Text(context.l10n.common_settings),
@@ -35,27 +20,44 @@ class SettingsPage extends HookConsumerWidget {
         children: [
           const SizedBox(height: 8.0),
           Expanded(
-            child: GroupedListView<Setting, String>(
-              elements: settings,
-              groupBy: (element) => element.group,
-              itemBuilder: (context, element) {
-                return ListTile(
-                  title: Text(element.name),
-                  subtitle: Text(element.value.toString()),
-                  leading: element.icon,
-                  onTap: () => element.onTap(),
-                );
-              },
-              groupSeparatorBuilder: (value) {
-                return Padding(
-                  padding: const EdgeInsets.only(left: 12.0, top: 8.0, bottom: 8.0),
+            child: ListView(
+              physics: const NeverScrollableScrollPhysics(),
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 12.0),
                   child: Text(
-                    value,
+                    context.l10n.settings_group_appearance,
                     style: context.textTheme.bodyMedium?.copyWith(color: context.colorScheme.primary),
                   ),
-                );
-              },
-              footer: const AppSettingsFooter(),
+                ),
+                const SizedBox(height: 8.0),
+                ListTile(
+                  title: Text(context.l10n.settings_theme_title),
+                  trailing: DropdownButton<ThemeMode>(
+                    value: appSettings.themeSetting,
+                    onChanged: (ThemeMode? value) {
+                      appSettings.themeSetting = value!;
+                      ref.read(appSettingsProvider.notifier).saveSettings();
+                    },
+                    items: const [
+                      DropdownMenuItem(
+                        value: ThemeMode.system,
+                        child: Text('System'),
+                      ),
+                      DropdownMenuItem(
+                        value: ThemeMode.light,
+                        child: Text('Light'),
+                      ),
+                      DropdownMenuItem(
+                        value: ThemeMode.dark,
+                        child: Text('Dark'),
+                      ),
+                    ],
+                  ),
+                ),
+                const Divider(),
+                const AppSettingsFooter(),
+              ],
             ),
           ),
         ],

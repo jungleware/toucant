@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_confetti/flutter_confetti.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -8,7 +7,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:toucant/extensions/build_context_extensions.dart';
 import 'package:toucant/models/daily.model.dart';
 import 'package:toucant/provider/daily.provider.dart';
-import 'package:toucant/widgets/clickable_text.widget.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
@@ -53,7 +51,10 @@ class HomePage extends HookConsumerWidget {
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: RefreshIndicator(
-            onRefresh: () => ref.refresh(getDailyProvider.future),
+            onRefresh: () {
+              userAnswer.value = null;
+              return ref.refresh(getDailyProvider.future);
+            },
             child: CustomScrollView(
               scrollBehavior: const MaterialScrollBehavior().copyWith(scrollbars: false, overscroll: false),
               slivers: [
@@ -112,10 +113,9 @@ class HomePage extends HookConsumerWidget {
                         alignment: Alignment.bottomCenter,
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: ElevatedButton.icon(
+                          child: ElevatedButton(
                             onPressed: () {},
-                            label: Text(context.l10n.common_help_button_text),
-                            icon: const Icon(Icons.help_outline_outlined),
+                            child: Text(context.l10n.common_help_button_text),
                           ),
                         ),
                       ),
@@ -142,7 +142,7 @@ class HomePage extends HookConsumerWidget {
           ),
           const SizedBox(height: 16),
           TextButton(
-            onPressed: () {},
+            onPressed: () => _launchSource(context, daily.source),
             child: Text(context.l10n.common_open_source_website),
           ),
         ],
@@ -166,9 +166,9 @@ class HomePage extends HookConsumerWidget {
             spacing: 16,
           ),
           const SizedBox(height: 16),
-          ClickableText(
-            text: context.l10n.common_open_source_website,
-            onTap: () => _launchSource(context, daily.source),
+          TextButton(
+            onPressed: () => _launchSource(context, daily.source),
+            child: Text(context.l10n.common_open_source_website),
           ),
         ],
       ),
@@ -182,7 +182,6 @@ class HomePage extends HookConsumerWidget {
         child: Text(answer),
         style: ElevatedButton.styleFrom(
           backgroundColor: _buildButtonColor(context, daily, answer, userAnswer),
-          foregroundColor: Colors.white,
         ),
       );
     }).toList();
@@ -192,7 +191,7 @@ class HomePage extends HookConsumerWidget {
     if (userAnswer == answer) {
       // If the users answer is correct, return the primary color
       if (daily.content.answer == answer) return context.themeData.colorScheme.primaryContainer;
-      return context.themeData.colorScheme.errorContainer;
+      return context.themeData.colorScheme.onError;
     }
     return null;
   }

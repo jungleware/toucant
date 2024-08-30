@@ -33,7 +33,7 @@ dependencies:
   url_launcher: ^6.3.0
   in_app_update: ^4.2.3
   package_info_plus: ^8.0.2
-  grouped_list: ^6.0.0
+  shared_preferences: ^2.3.2
 
 dev_dependencies:
   flutter_test:

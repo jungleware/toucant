@@ -9,11 +9,14 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:in_app_update/in_app_update.dart';
 import 'package:logging/logging.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/data/latest.dart';
 import 'package:toucant/constants/locales.dart';
 import 'package:toucant/extensions/build_context_extensions.dart';
 import 'package:toucant/provider/daily.provider.dart';
+import 'package:toucant/provider/locale.provider.dart';
 import 'package:toucant/provider/package_info.provider.dart';
+import 'package:toucant/provider/settings.provider.dart';
 import 'package:toucant/provider/theme.provider.dart';
 import 'package:toucant/routing/router.dart';
 import 'package:toucant/utils/toucant_app_theme.dart';
@@ -23,8 +26,15 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initApp();
 
+  final prefs = await SharedPreferences.getInstance();
+
   runApp(
-    const ProviderScope(child: TouCantApp()),
+    ProviderScope(
+      overrides: [
+        sharedPrefsProvider.overrideWithValue(prefs),
+      ],
+      child: const TouCantApp(),
+    ),
   );
 }
 
@@ -99,6 +109,9 @@ class _TouCantAppState extends ConsumerState<TouCantApp> with WidgetsBindingObse
 
     // Init package info
     ref.read(packageInfoProvider);
+
+    // Init settings
+    ref.read(appSettingsProvider);
   }
 
   Future<void> checkForUpdate() async {
@@ -120,6 +133,8 @@ class _TouCantAppState extends ConsumerState<TouCantApp> with WidgetsBindingObse
   @override
   void didChangeLocales(List<Locale>? locales) {
     ref.invalidate(getDailyProvider);
+    // Set the new locale in the locale provider
+    ref.read(localeProvider.notifier).state = locales?.first ?? toucantLocales.values.first;
     super.didChangeLocales(locales);
   }
 
