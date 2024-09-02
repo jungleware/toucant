@@ -3,7 +3,6 @@
 use axum::{routing, Json};
 use chrono::Datelike;
 use serde::{Deserialize, Serialize};
-use std::sync::Arc;
 
 /// Top level JSON data object with offset and daily entries
 ///
