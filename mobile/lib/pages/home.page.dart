@@ -22,7 +22,7 @@ class HomePage extends HookConsumerWidget {
     useEffect(() {
       /// Shuffle the possible answers if the daily is not refreshing, to prevent shuffling twice
       daily.whenData((data) {
-        if (data.type == DailyType.QUIZ && !daily.isRefreshing) {
+        if (data.type == DailyType.quiz && !daily.isRefreshing) {
           data.content.possibleAnswers!.shuffle();
         }
       });
@@ -74,8 +74,8 @@ class HomePage extends HookConsumerWidget {
                     children: [
                       daily.when(
                         data: (data) {
-                          if (data.type == DailyType.QUOTE) return _buildQuote(context, daily: data);
-                          if (data.type == DailyType.QUIZ) {
+                          if (data.type == DailyType.quote) return _buildQuote(context, daily: data);
+                          if (data.type == DailyType.quiz) {
                             return _buildQuiz(
                               context,
                               daily: data,
@@ -182,8 +182,8 @@ class HomePage extends HookConsumerWidget {
           ),
           const SizedBox(height: 16),
           OverflowBar(
-            children: _buildButtons(context, daily, onAnswer, userAnswer),
             spacing: 16,
+            children: _buildButtons(context, daily, onAnswer, userAnswer),
           ),
           const SizedBox(height: 16),
           TextButton(
@@ -202,10 +202,10 @@ class HomePage extends HookConsumerWidget {
     return daily.content.possibleAnswers!.map((answer) {
       return ElevatedButton(
         onPressed: () => onAnswer(answer),
-        child: Text(answer),
         style: ElevatedButton.styleFrom(
           backgroundColor: _buildButtonColor(context, daily, answer, userAnswer),
         ),
+        child: Text(answer),
       );
     }).toList();
   }

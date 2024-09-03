@@ -15,7 +15,6 @@ class SettingsService extends Notifier<AppSettings> {
   void saveSettings() {
     final prefs = ref.read(sharedPrefsProvider);
     prefs.setString('appSettings', jsonEncode(state.toJson()));
-    print('Settings saved');
     ref.notifyListeners();
   }
 

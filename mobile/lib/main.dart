@@ -10,6 +10,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:in_app_update/in_app_update.dart';
 import 'package:logging/logging.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:store_checker/store_checker.dart';
 import 'package:timezone/data/latest.dart';
 import 'package:toucant/constants/locales.dart';
 import 'package:toucant/extensions/build_context_extensions.dart';
@@ -79,7 +80,7 @@ class _TouCantAppState extends ConsumerState<TouCantApp> with WidgetsBindingObse
   AppUpdateInfo? _updateInfo;
 
   // The scaffold key to show snack bars
-  GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
 
   // Whether a flexible update is available
   bool _flexibleUpdateAvailable = false;
@@ -115,6 +116,8 @@ class _TouCantAppState extends ConsumerState<TouCantApp> with WidgetsBindingObse
   }
 
   Future<void> checkForUpdate() async {
+    Source source = await StoreChecker.getSource;
+    if (source != Source.IS_INSTALLED_FROM_PLAY_STORE) return;
     await InAppUpdate.checkForUpdate().then(
       (info) => setState(() => _updateInfo = info),
       onError: (e) => debugPrint('Error checking for update: $e'),
@@ -152,7 +155,7 @@ class _TouCantAppState extends ConsumerState<TouCantApp> with WidgetsBindingObse
     if (_updateInfo != null && _updateInfo!.updateAvailability == UpdateAvailability.updateAvailable) {
       return MaterialApp(
         title: 'TouCant',
-        localizationsDelegates: [
+        localizationsDelegates: const [
           AppLocalizations.delegate,
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
@@ -227,7 +230,7 @@ class _TouCantAppState extends ConsumerState<TouCantApp> with WidgetsBindingObse
 
     return MaterialApp.router(
       title: 'TouCant',
-      localizationsDelegates: [
+      localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,

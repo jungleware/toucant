@@ -15,7 +15,7 @@ class Daily {
   /// The content of the daily.
   final Content content;
 
-  Daily({
+  const Daily({
     required this.type,
     required this.keywords,
     required this.source,
@@ -23,7 +23,7 @@ class Daily {
   });
 
   factory Daily.fromJson(Map<String, dynamic> json) {
-    DailyType type = json['type'] == 'quote' ? DailyType.QUOTE : DailyType.QUIZ;
+    DailyType type = json['type'] == 'quote' ? DailyType.quote : DailyType.quiz;
     return Daily(
       type: type,
       keywords: List<String>.from(json['keywords']),
@@ -38,4 +38,4 @@ class Daily {
   }
 }
 
-enum DailyType { QUOTE, QUIZ }
+enum DailyType { quote, quiz }

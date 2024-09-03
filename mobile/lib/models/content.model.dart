@@ -27,7 +27,7 @@ class Content {
     required this.text,
     this.answer,
     this.wrongs,
-  }) : possibleAnswers = type == DailyType.QUIZ ? [answer!, ...wrongs!] : null;
+  }) : possibleAnswers = type == DailyType.quiz ? [answer!, ...wrongs!] : null;
 
   factory Content.fromJson(Map<String, dynamic> json, DailyType type) {
     return Content(
