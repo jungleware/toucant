@@ -8,9 +8,9 @@ import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:in_app_update/in_app_update.dart';
+import 'package:install_referrer/install_referrer.dart';
 import 'package:logging/logging.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:store_checker/store_checker.dart';
 import 'package:timezone/data/latest.dart';
 import 'package:toucant/constants/locales.dart';
 import 'package:toucant/extensions/build_context_extensions.dart';
@@ -116,8 +116,8 @@ class _TouCantAppState extends ConsumerState<TouCantApp> with WidgetsBindingObse
   }
 
   Future<void> checkForUpdate() async {
-    Source source = await StoreChecker.getSource;
-    if (source != Source.IS_INSTALLED_FROM_PLAY_STORE) return;
+    final referrer = await InstallReferrer.referrer;
+    if (referrer != InstallationAppReferrer.androidGooglePlay) return;
     await InAppUpdate.checkForUpdate().then(
       (info) => setState(() => _updateInfo = info),
       onError: (e) => debugPrint('Error checking for update: $e'),

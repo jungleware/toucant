@@ -33,7 +33,7 @@ dependencies:
   package_info_plus: ^8.0.2
   shared_preferences: ^2.3.2
   introduction_screen: ^3.1.14
-  store_checker: ^1.6.0
+  install_referrer: ^1.2.1
 
 dev_dependencies:
   flutter_test:
