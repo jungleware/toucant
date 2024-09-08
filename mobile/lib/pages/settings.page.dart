@@ -86,11 +86,15 @@ class SettingsPage extends HookConsumerWidget {
                     subtitle: Text(context.l10n.settings_notify_on_new_content_description),
                     trailing: Switch(
                       value: appSettings.notifyOnNewContent,
-                      onChanged: (bool value) {
+                      onChanged: (bool value) async {
                         appSettings.notifyOnNewContent = value;
                         ref.read(appSettingsProvider.notifier).saveSettings();
                         if (appSettings.notifyOnNewContent) {
-                          ref.read(notificationServiceProvider).createScheduledNotifications(context);
+                          final res = await ref.read(notificationServiceProvider).createScheduledNotifications(context);
+                          if (!res) {
+                            appSettings.notifyOnNewContent = false;
+                            ref.read(appSettingsProvider.notifier).saveSettings();
+                          }
                         } else {
                           ref.read(notificationServiceProvider).removeScheduledNotifications();
                         }

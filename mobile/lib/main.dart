@@ -125,7 +125,7 @@ class _TouCantAppState extends ConsumerState<TouCantApp> with WidgetsBindingObse
     ref.read(packageInfoProvider);
 
     // Init settings
-    ref.read(appSettingsProvider);
+    final appSettings = ref.read(appSettingsProvider);
 
     // Init Notifications
     AwesomeNotifications().setListeners(
@@ -135,7 +135,7 @@ class _TouCantAppState extends ConsumerState<TouCantApp> with WidgetsBindingObse
       onDismissActionReceivedMethod: NotificationService.onDismissActionReceivedMethod,
     );
     bool isNotificationAllowed = await AwesomeNotifications().isNotificationAllowed();
-    if (!isNotificationAllowed) {
+    if (!isNotificationAllowed && appSettings.notifyOnNewContent) {
       await AwesomeNotifications().requestPermissionToSendNotifications();
     }
   }
