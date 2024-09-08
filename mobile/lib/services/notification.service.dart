@@ -31,13 +31,13 @@ class NotificationService {
   }
 
   /// Creates a scheduled notification that should be run daily at 10:00 AM
-  void createScheduledNotifications(BuildContext context) async {
+  Future<bool> createScheduledNotifications(BuildContext context) async {
     // Check if permission is granted
     if (!await AwesomeNotifications().isNotificationAllowed()) {
-      await AwesomeNotifications().requestPermissionToSendNotifications();
+      return await AwesomeNotifications().requestPermissionToSendNotifications();
     }
-    if (!context.mounted) return;
-    await AwesomeNotifications().createNotification(
+    if (!context.mounted) return false;
+    return await AwesomeNotifications().createNotification(
       content: NotificationContent(
         id: 10,
         channelKey: 'basic_channel',

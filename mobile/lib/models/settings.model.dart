@@ -5,18 +5,21 @@ class AppSettings {
   bool notifyOnNewContent;
 
   AppSettings({
-    required this.themeSetting,
-    required this.notifyOnNewContent,
+    this.themeSetting = ThemeMode.system,
+    this.notifyOnNewContent = true,
   });
 
-  factory AppSettings.fromJson(Map<String, dynamic> json) {
+  factory AppSettings.fromJson(Map<String, Object?> json) {
     return AppSettings(
-      themeSetting: ThemeMode.values.firstWhere((element) => element.toString() == json['themeSetting']),
-      notifyOnNewContent: json['notifyOnNewContent'],
+      themeSetting: ThemeMode.values.firstWhere(
+        (element) => element.toString() == json['themeSetting'],
+        orElse: () => ThemeMode.system,
+      ),
+      notifyOnNewContent: (json['notifyOnNewContent'] ?? true) as bool,
     );
   }
 
-  Map<String, dynamic> toJson() {
+  Map<String, Object?> toJson() {
     return {
       'themeSetting': themeSetting.toString(),
       'notifyOnNewContent': notifyOnNewContent,
