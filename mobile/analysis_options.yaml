@@ -27,6 +27,8 @@ linter:
     require_trailing_commas: true
     unrelated_type_equality_checks: true
     prefer_const_constructors: true
+    avoid_dynamic_calls: true
+    avoid_annotating_with_dynamic: true
 # Additional information about this file can be found at
 # https://dart.dev/guides/language/analysis-options
 
@@ -50,6 +52,7 @@ dart_code_metrics:
     - avoid-duplicate-patterns
     - avoid-generics-shadowing
     - avoid-global-state
+    - avoid-dynamic-calls
     # Flutter
     # - add-copy-with:
     #     file-name-pattern: '.model.dart'

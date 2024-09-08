@@ -23,7 +23,7 @@ class ApiService {
       throw Exception('Failed to load daily');
     }
 
-    Map<String, dynamic> data = response.data;
+    Map<String, Object?> data = response.data;
 
     // Get only the daily for the current locale (or fallback to the default - first - entry in toucantLocales)
     String currentLocale = Platform.localeName.split('_').first.trim();
@@ -32,16 +32,16 @@ class ApiService {
     }
 
     // Get the content field
-    final List<Map<String, dynamic>> jsonContent = data['content'].cast<Map<String, dynamic>>();
+    final List<Map<String, Object?>> jsonContent = List<Map<String, Object?>>.from(data['content'] as List<Object?>);
 
     // Get a fallback content if the current locale is not available
-    final Map<String, dynamic> fallbackContent = jsonContent.firstWhere(
+    final Map<String, Object?> fallbackContent = jsonContent.firstWhere(
       (element) => element['lang'].toString().trim() == toucantLocales.values.first.languageCode.trim(),
       orElse: () => jsonContent.first,
     );
 
     // Get the content for the current locale
-    final Map<String, dynamic> content = jsonContent.firstWhere(
+    final Map<String, Object?> content = jsonContent.firstWhere(
       (element) => element['lang'].toString().trim() == currentLocale,
       orElse: () => fallbackContent,
     );

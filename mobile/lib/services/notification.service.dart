@@ -34,10 +34,11 @@ class NotificationService {
   Future<bool> createScheduledNotifications(BuildContext context) async {
     // Check if permission is granted
     if (!await AwesomeNotifications().isNotificationAllowed()) {
-      return await AwesomeNotifications().requestPermissionToSendNotifications();
+      final res = await AwesomeNotifications().requestPermissionToSendNotifications();
+      if (!res) return false;
     }
     if (!context.mounted) return false;
-    return await AwesomeNotifications().createNotification(
+    await AwesomeNotifications().createNotification(
       content: NotificationContent(
         id: 10,
         channelKey: 'basic_channel',
@@ -47,9 +48,11 @@ class NotificationService {
       ),
       schedule: NotificationAndroidCrontab.daily(referenceDateTime: DateTime(2024, 1, 1, 12, 0, 0)),
     );
+    return true;
   }
 
   void removeScheduledNotifications() async {
     await AwesomeNotifications().cancelSchedule(10);
+    debugPrint('Scheduled notifications removed');
   }
 }
