@@ -1,9 +1,11 @@
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:toucant/constants/context.dart';
 import 'package:toucant/pages/home.page.dart';
 import 'package:toucant/pages/settings.page.dart';
 
 final _appRouter = GoRouter(
+  navigatorKey: kNavigatorKey,
   routes: [
     GoRoute(
       path: '/',

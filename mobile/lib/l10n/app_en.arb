@@ -17,11 +17,16 @@
     "common_open_source_licenses": "Open Source Licenses",
     "common_help_button_text": "Help",
     "settings_group_appearance": "Appearance",
+    "settings_group_notifications": "Notifications",
     "settings_theme_title": "Theme",
     "settings_theme_dark": "Dark",
     "settings_theme_light": "Light",
     "settings_theme_system": "System",
+    "settings_notify_on_new_content_title": "Clack-Clack",
+    "settings_notify_on_new_content_description": "Receive a notification when new content is available.",
     "semantics_app_icon": "The app icon, representing a toucan bird.",
     "semantics_current_app_theme": "The app is currently using the {theme} theme.",
-    "semantics_current_app_version": "The app is currently running version {version}."
+    "semantics_current_app_version": "The app is currently running version {version}.",
+    "notifications_new_content": "clack-clack",
+    "notifications_new_content_description": "Mr. TouCan(t) has something new for you."
 }

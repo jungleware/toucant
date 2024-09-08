@@ -17,11 +17,16 @@
     "common_open_source_licenses": "Open Source Lizenzen",
     "common_help_button_text": "Hilfe",
     "settings_group_appearance": "Erscheinungsbild",
+    "settings_group_notifications": "Benachrichtigungen",
     "settings_theme_title": "Erscheinungsbild",
     "settings_theme_dark": "Dunkles Design",
     "settings_theme_light": "Helles Design",
     "settings_theme_system": "Systemdesign",
+    "settings_notify_on_new_content_title": "Klack-Klack",
+    "settings_notify_on_new_content_description": "Erhalte eine Benachrichtigung, wenn neuer Inhalt verfügbar ist.",
     "semantics_app_icon": "Das App-Symbol, das einen Tukanvogel darstellt.",
     "semantics_current_app_theme": "Die App verwendet derzeit das {theme}.",
-    "semantics_current_app_version": "Die App verwendet derzeit die Version {version}."
+    "semantics_current_app_version": "Die App verwendet derzeit die Version {version}.",
+    "notifications_new_content": "klack-klack",
+    "notifications_new_content_description": "Der TouCan hat etwas Neues für dich."
 }

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +21,7 @@ import 'package:toucant/provider/package_info.provider.dart';
 import 'package:toucant/provider/settings.provider.dart';
 import 'package:toucant/provider/theme.provider.dart';
 import 'package:toucant/routing/router.dart';
+import 'package:toucant/services/notification.service.dart';
 import 'package:toucant/utils/toucant_app_theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -66,6 +68,17 @@ Future<void> initApp() async {
   };
 
   initializeTimeZones();
+
+  AwesomeNotifications().initialize(
+    null,
+    [
+      NotificationChannel(
+        channelKey: 'basic_channel',
+        channelName: 'Daily Notifications',
+        channelDescription: 'Daily notifications for TouCant',
+      ),
+    ],
+  );
 }
 
 class TouCantApp extends ConsumerStatefulWidget {
@@ -113,6 +126,18 @@ class _TouCantAppState extends ConsumerState<TouCantApp> with WidgetsBindingObse
 
     // Init settings
     ref.read(appSettingsProvider);
+
+    // Init Notifications
+    AwesomeNotifications().setListeners(
+      onActionReceivedMethod: NotificationService.onActionReceivedMethod,
+      onNotificationCreatedMethod: NotificationService.onNotificationCreatedMethod,
+      onNotificationDisplayedMethod: NotificationService.onNotificationDisplayedMethod,
+      onDismissActionReceivedMethod: NotificationService.onDismissActionReceivedMethod,
+    );
+    bool isNotificationAllowed = await AwesomeNotifications().isNotificationAllowed();
+    if (!isNotificationAllowed) {
+      await AwesomeNotifications().requestPermissionToSendNotifications();
+    }
   }
 
   Future<void> checkForUpdate() async {
