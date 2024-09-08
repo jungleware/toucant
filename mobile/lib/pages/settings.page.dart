@@ -1,7 +1,9 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:toucant/constants/strings.dart';
 import 'package:toucant/extensions/build_context_extensions.dart';
+import 'package:toucant/provider/notifications.provider.dart';
 import 'package:toucant/provider/package_info.provider.dart';
 import 'package:toucant/provider/settings.provider.dart';
 import 'package:toucant/provider/theme.provider.dart';
@@ -63,6 +65,36 @@ class SettingsPage extends HookConsumerWidget {
                           ),
                         ],
                       ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 8.0),
+                Padding(
+                  padding: const EdgeInsets.only(left: 12.0),
+                  child: Text(
+                    context.l10n.settings_group_notifications,
+                    style: context.textTheme.bodyMedium?.copyWith(color: context.colorScheme.primary),
+                    semanticsLabel: context.l10n.settings_group_notifications,
+                  ),
+                ),
+                const SizedBox(height: 8.0),
+                Semantics(
+                  button: true,
+                  value: appSettings.notifyOnNewContent.toString(),
+                  child: ListTile(
+                    title: ExcludeSemantics(child: Text("${context.l10n.settings_notify_on_new_content_title} ${Emojis.animals_parrot}")),
+                    subtitle: Text(context.l10n.settings_notify_on_new_content_description),
+                    trailing: Switch(
+                      value: appSettings.notifyOnNewContent,
+                      onChanged: (bool value) {
+                        appSettings.notifyOnNewContent = value;
+                        ref.read(appSettingsProvider.notifier).saveSettings();
+                        if (appSettings.notifyOnNewContent) {
+                          ref.read(notificationServiceProvider).createScheduledNotifications(context);
+                        } else {
+                          ref.read(notificationServiceProvider).removeScheduledNotifications();
+                        }
+                      },
                     ),
                   ),
                 ),

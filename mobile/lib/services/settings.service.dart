@@ -37,4 +37,5 @@ class SettingsService extends Notifier<AppSettings> {
 
 final AppSettings defaultSettings = AppSettings(
   themeSetting: ThemeMode.system,
+  notifyOnNewContent: true,
 );
