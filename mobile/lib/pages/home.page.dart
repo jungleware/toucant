@@ -119,7 +119,7 @@ class HomePage extends HookConsumerWidget {
                           }
                           return Center(
                             child: Text(
-                              context.l10n.error_no_internet,
+                              error.toString(),
                               textAlign: TextAlign.center,
                             ),
                           );

@@ -93,6 +93,7 @@ class SettingsPage extends HookConsumerWidget {
                           final res = await ref.read(notificationServiceProvider).createScheduledNotifications(context);
                           if (!res) {
                             appSettings.notifyOnNewContent = false;
+                            ref.read(notificationServiceProvider).removeScheduledNotifications();
                             ref.read(appSettingsProvider.notifier).saveSettings();
                           }
                         } else {

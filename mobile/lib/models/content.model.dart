@@ -29,13 +29,13 @@ class Content {
     this.wrongs,
   }) : possibleAnswers = type == DailyType.quiz ? [answer!, ...wrongs!] : null;
 
-  factory Content.fromJson(Map<String, dynamic> json, DailyType type) {
+  factory Content.fromJson(Map<String, Object?> json, DailyType type) {
     return Content(
-      locale: Locale(json['lang']),
+      locale: Locale(json['lang'] as String),
       type: type,
-      text: json['text'],
-      answer: json['answer'],
-      wrongs: json['wrong']?.cast<String>(),
+      text: json['text'] as String,
+      answer: json['answer'] as String?,
+      wrongs: json['wrong'] as List<String>? ?? [],
     );
   }
 

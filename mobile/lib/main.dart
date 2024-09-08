@@ -17,6 +17,7 @@ import 'package:toucant/constants/locales.dart';
 import 'package:toucant/extensions/build_context_extensions.dart';
 import 'package:toucant/provider/daily.provider.dart';
 import 'package:toucant/provider/locale.provider.dart';
+import 'package:toucant/provider/notifications.provider.dart';
 import 'package:toucant/provider/package_info.provider.dart';
 import 'package:toucant/provider/settings.provider.dart';
 import 'package:toucant/provider/theme.provider.dart';
@@ -136,7 +137,12 @@ class _TouCantAppState extends ConsumerState<TouCantApp> with WidgetsBindingObse
     );
     bool isNotificationAllowed = await AwesomeNotifications().isNotificationAllowed();
     if (!isNotificationAllowed && appSettings.notifyOnNewContent) {
-      await AwesomeNotifications().requestPermissionToSendNotifications();
+      final res = await AwesomeNotifications().requestPermissionToSendNotifications();
+      if (!res) {
+        appSettings.notifyOnNewContent = false;
+        ref.read(appSettingsProvider.notifier).saveSettings();
+        ref.read(notificationServiceProvider).removeScheduledNotifications();
+      }
     }
   }
 
