@@ -35,7 +35,7 @@ class Content {
       type: type,
       text: json['text'] as String,
       answer: json['answer'] as String?,
-      wrongs: json['wrong'] as List<String>? ?? [],
+      wrongs: List<String>.from(json['wrong'] as List),
     );
   }
 
